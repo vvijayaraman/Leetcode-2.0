@@ -1,33 +1,26 @@
 class Solution {
 
-    String longestStr = "";
+    String longest = "";
 
     public String longestPalindrome(String s) {
-        // 1. Start from the centre and loop outside
-        // 2. You could have 2 centres, odd and even so handle both cases.
-
-        for(int i = 0; i < s.length(); i++) {
-
-            findPalindrome(i, i, s); // Left and right start in the centre
-            findPalindrome(i, i+1, s); // Left and right start next to each other, 2 middles
+        for (int i = 0; i < s.length(); i++) {
+            longestPalindrome(s, i, i);
+            longestPalindrome(s, i, i+1);
         }
 
-        return longestStr;
+        return longest;
         
     }
 
-    public void findPalindrome(int left, int right, String s) {
-        String currStr = "";
-
-        while(left >= 0 && right < s.length() && s.charAt(left) == s.charAt(right)) {
+    public void longestPalindrome(String s, int left, int right) {
+        while(left >= 0 && right <= s.length() - 1 && s.charAt(left) == s.charAt(right)) {
             left--;
             right++;
         }
 
-        currStr = s.substring(left + 1, right);
-
-        if (currStr.length() > longestStr.length()) {
-            longestStr = currStr;
+        String currString = s.substring(left + 1, right);
+        if (currString.length() > longest.length()) {
+            longest = currString;
         }
 
     }
