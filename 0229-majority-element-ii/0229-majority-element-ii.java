@@ -12,9 +12,7 @@ class Solution {
             // Need to take care of an edge case where candidate1 and candidate2 are not the same number
             if (count1 == 0 && candidate2 != num) {
                 candidate1 = num;
-            }  
-            
-            if (count2 == 0 && candidate1 != num) {
+            } else if (count2 == 0 && candidate1 != num) {
                 candidate2 = num;
             }
 
