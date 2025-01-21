@@ -1,90 +1,84 @@
 class LRUCache {
-    Map<Integer, Node> map;
-    int capacity = Integer.MIN_VALUE;
 
-    // Starting setup as head -> tail
-    Node dummyHead = new Node(-1, -1);
-    Node dummyTail = new Node(-1, -1);
+    Map<Integer, Node> map;
+    Node head = new Node(-1, -1);
+    Node tail = new Node(-1, -1);
+    int capacity = 0;
 
     public LRUCache(int capacity) {
-      
-        dummyHead.next = dummyTail;
-        dummyTail.prev = dummyHead;
-
+        map = new HashMap<>(capacity);
+        head.next = tail;
+        tail.prev = head;
         this.capacity = capacity;
-    
-        map = new HashMap<>(2);
+        
     }
     
     public int get(int key) {
-        // get node and move to head, else -1
-        if (!map.containsKey(key)) {
-            return -1;
+        if (map.containsKey(key)) {
+            Node node = map.get(key);
+            deleteNode(node);
+            addNode(node);
+            return node.val;
         }
 
-        Node getNode = map.get(key);
-        deleteNode(getNode);
-        insertNode(getNode);
-        return getNode.val;
+        return -1;
         
     }
     
     public void put(int key, int value) {
-        // if map does not contains key - add at head, if it does update node and move to head
-
-        if (!map.containsKey(key)) {
-            Node node = new Node(key, value);
-
-            // Evict if full
-            if (map.size() == capacity) {
-                // order is important cause deleting first will change pointers
-                map.remove(dummyTail.prev.key);
-                deleteNode(dummyTail.prev);
-                
-            }
-
-            insertNode(node);
+        if (map.containsKey(key)) {
+            Node node = map.get(key);
+            node.val = value;
             map.put(key, node);
-        } else {
 
-            Node getNode = map.get(key);
-            getNode.val = value;
-            deleteNode(getNode);
-            insertNode(getNode);
-            map.put(getNode.key, getNode);
+            deleteNode(node);
+            addNode(node);
+
+            return;
         }
-        
+
+        Node newNode = new Node(key, value);
+
+        if (map.size() == capacity) {
+            Node evict = tail.prev;
+            deleteNode(evict);
+            map.remove(evict.key);
+        } 
+
+        addNode(newNode);
+        map.put(key, newNode);
+
     }
 
-    public void insertNode(Node insert) {
-        // Insertion is always in the head
-        Node currHead = dummyHead.next;
+ // 1 -> 2 -> 3
+    public void addNode(Node node) {
+        Node currHead = head.next;
+        head.next = node;
+        node.prev = head;
 
-        insert.prev = dummyHead;
-        insert.next = currHead;
-        dummyHead.next = insert;
-        currHead.prev = insert;
+        node.next = currHead;
+        currHead.prev = node;
 
-
-     
     }
 
-    public void deleteNode(Node delete) {
-        // Deletion has 2 cases - deleting from tail due to capacity, or get()
-        Node deletePrev = delete.prev;
-        Node deleteNext = delete.next;
+// 1 -> 2 -> 3 -> dummy
+    public void deleteNode(Node node) {
+        Node currNode = map.get(node.key);
 
-        deletePrev.next = deleteNext;
-        deleteNext.prev = deletePrev;
+        Node currNodePrev = currNode.prev;
+        Node currNodeNext = currNode.next;
+
+        currNodePrev.next = currNodeNext;
+        currNodeNext.prev = currNodePrev;
 
     }
 }
 
-class Node {
-    int key;
-    int val;
-    Node prev;
-    Node next;
+public class Node {
+    public int key;
+    public int val;
+    public Node next;
+    public Node prev;
 
     public Node(int key, int val) {
         this.key = key;
