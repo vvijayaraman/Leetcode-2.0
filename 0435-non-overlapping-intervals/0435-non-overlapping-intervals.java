@@ -1,23 +1,25 @@
 class Solution {
     public int eraseOverlapIntervals(int[][] intervals) {
-        int remove = 0;
-        Arrays.sort(intervals, (a,b) -> a[0] - b[0]);
+        Arrays.sort(intervals, (a,b) -> a[1] - b[1]); // sort by end time
 
-        Queue<Integer> queue = new PriorityQueue<>(Collections.reverseOrder()); // max heap
-        queue.add(intervals[0][1]);
+        int currEndTime = intervals[0][1];
+        int inclusion = 1;
 
         for(int i = 1; i < intervals.length; i++) {
-            if (intervals[i][0] < queue.peek()) { // overlapping
-                int currEnd = queue.remove();
-                queue.add(Math.min(currEnd, intervals[i][1]));
+            if (intervals[i][0] < currEndTime) {
+                currEndTime = Math.min(currEndTime, intervals[i][1]);  // since sorted by end time - i can just set my end time
+                continue;
             } else {
-                queue.add(intervals[i][1]);
+                inclusion++;
+                currEndTime = intervals[i][1];
             }
 
         }
 
-        return intervals.length - queue.size();
 
+        return intervals.length - inclusion;
+
+        
         
     }
 }
