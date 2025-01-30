@@ -3,7 +3,7 @@ class Solution {
         int remove = 0;
         Arrays.sort(intervals, (a,b) -> a[0] - b[0]);
 
-        Queue<Integer> queue = new PriorityQueue<>(Collections.reverseOrder()); // min heap
+        Queue<Integer> queue = new PriorityQueue<>(Collections.reverseOrder()); // max heap
         queue.add(intervals[0][1]);
 
         for(int i = 1; i < intervals.length; i++) {
