@@ -7,7 +7,7 @@ class Solution {
 
         for(int i = 1; i < intervals.length; i++) {
             if (intervals[i][0] < currEndTime) {
-                currEndTime = Math.min(currEndTime, intervals[i][1]);  // since sorted by end time - i can just set my end time
+              // since sorted by end time - i don't need to do anything. Simply ignore and move on
                 continue;
             } else {
                 inclusion++;
