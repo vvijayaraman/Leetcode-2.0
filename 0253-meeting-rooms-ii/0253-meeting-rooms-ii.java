@@ -1,27 +1,24 @@
 class Solution {
     public int minMeetingRooms(int[][] intervals) {
-        int minRooms = 1;
+        Arrays.sort(intervals, (a,b) -> a[0] - b[0]); // sort by start time
+        int answer = 0;
 
-        Arrays.sort(intervals, (a,b) -> a[0] - b[0]);
-        Queue<Integer> queue = new PriorityQueue<>(); // min heap
-        queue.add(intervals[0][1]);
+        Queue<int[]> queue = new PriorityQueue<>((a,b) -> a[1] - b[1]);
+        queue.add(intervals[0]);
 
-        for(int i = 1; i < intervals.length; i++) {
-        
-            // [2,4], [7,10] -> [4,7] - 
-            // keep track of earliest end times using min heap
+        for (int i = 1; i < intervals.length; i++) {
+                int[] arr = queue.remove();
 
-            if (intervals[i][0] >= queue.peek()) { // not overlapping
-                queue.remove();
-            } else {
-                minRooms++;
+                // does it overlap;
+                if (intervals[i][0] < arr[1]) {
+                    queue.add(intervals[i]);
+                    queue.add(arr);
+                } else {
+                    queue.add(intervals[i]);
+                }
             }
 
-            queue.add(intervals[i][1]);
-        }
-
-        return minRooms;
-
+        return queue.size();
         
     }
 }
