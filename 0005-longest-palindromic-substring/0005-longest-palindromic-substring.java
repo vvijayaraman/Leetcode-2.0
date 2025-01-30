@@ -1,31 +1,35 @@
+// TC - O(N^2)
+// SC - O(n) - string created
 class Solution {
 
-    String max = "";
+    String longestStr = "";
 
     public String longestPalindrome(String s) {
-        // odd = 1 centre
-        // even = 2 centres
+        // 1. Start from the centre and loop outside
+        // 2. You could have 2 centres, odd and even so handle both cases.
 
-        for (int i = 0; i < s.length(); i++) {
-            palindrome(i, i, s); // odd
-            palindrome(i, i+1, s); // odd
+        for(int i = 0; i < s.length(); i++) {
+
+            findPalindrome(i, i, s); // Left and right start in the centre
+            findPalindrome(i, i+1, s); // Left and right start next to each other, 2 middles
         }
 
-        return max;
-
+        return longestStr;
         
     }
 
-    public void palindrome(int start, int end, String s) {
-        while(start >= 0 && end < s.length() && s.charAt(start) == s.charAt(end)) {
-            start--;
-            end++; 
+    public void findPalindrome(int left, int right, String s) {
+        String currStr = "";
+
+        while(left >= 0 && right < s.length() && s.charAt(left) == s.charAt(right)) {
+            left--;
+            right++;
         }
 
-        String substring = s.substring(start + 1, end); // end is excluded
+        currStr = s.substring(left + 1, right);
 
-        if (max.length() < substring.length()) {
-            max = substring;
+        if (currStr.length() > longestStr.length()) {
+            longestStr = currStr;
         }
 
     }
