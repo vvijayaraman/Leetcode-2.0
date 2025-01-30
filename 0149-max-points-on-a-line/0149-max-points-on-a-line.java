@@ -34,8 +34,10 @@ class Solution {
             return Double.MAX_VALUE;
         }
 
-    
+        if (y1 == y2) {
+            return 0.0;
+        }
 
-        return Math.abs((double) (y2 - y1) / (double) (x2 - x1));
+        return (double) (y2 - y1) / (double) (x2 - x1);
     }
  }
