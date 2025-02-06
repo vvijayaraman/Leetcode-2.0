@@ -8,29 +8,30 @@ class TimeMap {
     }
     
     public void set(String key, String value, int timestamp) {
-        if (!map.containsKey(key)) {
-            TreeMap<Integer, String> innerMap = new TreeMap<>();
-            innerMap.put(timestamp, value);
-
-            map.put(key, innerMap);
-        } else {
+        if (map.containsKey(key)) {
             map.get(key).put(timestamp, value);
+        } else {
+            TreeMap<Integer, String> iMap = new TreeMap<>();
+            iMap.put(timestamp, value);
+            map.put(key, iMap);
 
         }
-       
-    
+        
     }
     
     public String get(String key, int timestamp) {
-
         if (!map.containsKey(key)) {
             return "";
-
         }
 
-        Integer greatestKey = map.get(key).floorKey(timestamp);
-        return greatestKey == null ? "" : map.get(key).get(greatestKey);
-    
+        Integer lsTs = map.get(key).floorKey(timestamp);
+
+        if (key == null) {
+            return "";
+        }
+
+        return map.get(key).get(lsTs);
+
         
     }
 }
