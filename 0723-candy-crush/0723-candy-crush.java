@@ -36,16 +36,7 @@ class Solution {
             } 
         }
 
-        // 3 - Iterate all the tagged elements and replace with 0
-        if (!done) {
-            for(int i = 0; i < board.length; i++) {
-                for(int j = 0; j < board[0].length; j++) {
-                    if (board[i][j] < 0) {
-                        board[i][j] = 0;
-                }
-            }
-          }
-        }
+
 
     
           // Apply gravity logic for all zeroes
