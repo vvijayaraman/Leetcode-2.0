@@ -47,14 +47,13 @@ class Solution {
                 for(int i = 0; i < list.size(); i++) {
                     indegree[list.get(i)]--;
 
-                if (indegree[list.get(i)] == 0) {
-                    queue.add(list.get(i));
-                }
+                    if (indegree[list.get(i)] == 0) {
+                        queue.add(list.get(i));
+                    }
                 }
             }
-
-            }
-
+        }
+       
 
         if (topo.size() == numCourses) {
             return true;
