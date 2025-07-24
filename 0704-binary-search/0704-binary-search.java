@@ -10,10 +10,10 @@ class Solution {
                 return mid;
             }
 
-            if (target < nums[mid]) {
-                right = mid;
+            if (target < nums[mid]) { // left is always at minimal k satisfying this condition
+                right = mid; // mid maybe the answer but still haven't found
             } else {
-                left = mid + 1;
+                left = mid + 1; // mid cannot be the answer
             }
         }
 
