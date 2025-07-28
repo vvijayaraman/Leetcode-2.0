@@ -1,40 +1,105 @@
 class MyHashSet {
-    int[] arr;
+
+    Node[] arr;
 
     public MyHashSet() {
-        arr = new int[100001]; 
-        Arrays.fill(arr, -1);
+        arr = new Node[10000001];
     }
     
     public void add(int key) {
-       int bucket = getBucket(key);
-       arr[bucket] = key;
+        int bucket = getBucket(key);
+        
+        if (arr[bucket] == null) {
+            arr[bucket] = new Node(key);
+        } else {
+            // existing bucket -> add at the end
+            Node head = arr[bucket];
+            Node curr = head;
+            Node prev = head;
+
+            while(curr != null) {
+                if (curr.val == key) {
+                    return;
+                } else {
+                    prev = curr;
+                    curr = curr.next;
+                }
+                
+            }
+
+            prev.next = new Node(key);
+   
+        }
         
     }
     
     public void remove(int key) {
-        if (contains(key)) {
-            int bucket = getBucket(key);
-            arr[bucket] = -1;
+        int bucket = getBucket(key);
+
+        if (arr[bucket] == null) {
+            return;
+        }
+
+        Node head = arr[bucket];
+        Node curr = head;
+        Node prev = head;
+
+        // if removing head
+        if (head.val == key) {
+            arr[bucket] = head.next;
+            return;
+        }
+
+        // not a head
+        while (curr != null) {
+            if (curr.val == key) {
+                prev.next = curr.next;
+                return;
+            } else {
+                prev = curr;
+                curr = curr.next;
+            }
         }
         
     }
     
     public boolean contains(int key) {
         int bucket = getBucket(key);
-        if (arr[bucket] == -1) {
+
+        if (arr[bucket] == null) {
             return false;
         }
 
-        return true;
-        
+        Node head = arr[bucket];
+        Node curr = head;
+
+        while(curr != null) {
+            if (curr.val == key) {
+                return true;
+            }
+
+            curr = curr.next;
+
+        }
+
+        return false;
+
     }
 
     public int getBucket(int key) {
         int hash = Integer.hashCode(key);
-        int bucket = hash % arr.length;
+        return hash % arr.length;
 
-        return bucket;
+    }
+}
+ 
+
+class Node {
+    int val;
+    Node next;
+
+    public Node(int val) {
+        this.val = val;
     }
 }
 
