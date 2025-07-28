@@ -1,107 +1,72 @@
 class MyHashMap {
+    ListNode[] buckets;
 
-    Node[] arr;
-
+    /** Initialize your data structure here. */
     public MyHashMap() {
-        arr = new Node[10000001];
-        
+        buckets = new ListNode[10000]; // initialize hashmap, 10000 is the number of operations
     }
     
+    /** value will always be non-negative. */
     public void put(int key, int value) {
-        int bucket = getBucket(key);
-
-        // insert new Node
-        if (arr[bucket] == null) {
-            arr[bucket] = new Node(key, value);
+        int index = getIndex(key);
+        ListNode prev = findLastNode(index, key);
+        
+        if (prev.next == null) {
+            prev.next = new ListNode(key, value);
         } else {
-             // repace existing Node or create new node at the end
-            Node head = arr[bucket];
-            Node curr = head;
-            Node prev = head;
-
-            while(curr != null) {
-                if (curr.key == key) {
-                    curr.val = value;
-                    return;
-                } else {
-                    prev = curr;
-                    curr = curr.next;
-                }
-            }
-
-            prev.next = new Node(key, value);
+            prev.next.value = value;
         }
-        
     }
     
+    /** Returns the value to which the specified key is mapped, or -1 if this map contains no mapping for the key */
     public int get(int key) {
-        int bucket = getBucket(key);
-
-        if (arr[bucket] == null) {
-            return -1;
+        int index = getIndex(key);
+        ListNode getNode = findLastNode(index, key);
+        return getNode.next == null ? -1 : getNode.next.value;        
+    }
+    
+    /** Removes the mapping of the specified value key if this map contains a mapping for the key */
+    public void remove(int key) {
+        int index = getIndex(key);
+        
+        ListNode getNode = findLastNode(index, key);
+        if (getNode.next != null) {
+            getNode.next = getNode.next.next;
         }
-
-        Node head = arr[bucket];
-        Node curr = head;
-
-        while(curr != null && curr.key != key) {
-            curr = curr.next;
-        }
-
-        return curr != null && curr.key == key ? curr.val : -1;
-
         
     }
     
-    public void remove(int key) {
-        int bucket = getBucket(key);
-
-        if (arr[bucket] == null) {
-            return;
-        }
-
-        Node head = arr[bucket];
-        Node curr = head;
-        Node prev = head;
-
-        // if removing head
-        if (head.key == key) {
-            arr[bucket] = head.next;
-            return;
-        }
-
-        // if not head
-        while(curr != null) {            
-            if (curr.key == key) {
-                prev.next = curr.next;
-            } else {
-                prev = curr;
-                curr = curr.next;
-            }
-        }
-    }
-
-
-    public int getBucket(int key) {
+    public int getIndex(int key) {
         int hash = Integer.hashCode(key);
-        return hash % arr.length;
+        return hash % buckets.length;
     }
     
-
+    public ListNode findLastNode(int index, int key) {
+        if (buckets[index] == null) {
+           return buckets[index] = new ListNode(-1, -1);
+        } 
+        
+        ListNode prev = buckets[index];
+        while (prev.next != null && prev.next.key != key) {
+            prev = prev.next;
+        }
+        
+        return prev;
+    }
+  
     
- }
-
-class Node {
-    int key;
-    int val;
-    Node next;
-
-    public Node(int key, int val) {
+public static class ListNode {
+        int key;
+        int value;
+        ListNode next;
+    
+    public ListNode(int key, int value) {
         this.key = key;
-        this.val = val;
+        this.value = value;
     }
 }
-
+    
+}
 /**
  * Your MyHashMap object will be instantiated and called as such:
  * MyHashMap obj = new MyHashMap();
