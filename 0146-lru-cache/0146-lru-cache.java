@@ -45,8 +45,8 @@ class LRUCache {
             Node node = dummyTail.prev;
 
             // evict Node
-            map.remove(node.key);
             removeNode(node);
+            map.remove(node.key);
         }
 
         Node newNode = new Node(key, value);
