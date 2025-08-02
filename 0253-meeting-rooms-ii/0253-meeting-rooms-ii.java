@@ -22,7 +22,7 @@ class Solution {
 
         }
 
-        return rooms;
+        return minHeap.size();
 
 
 
